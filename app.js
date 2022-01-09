@@ -78,9 +78,6 @@ app.get("/", (req, res)=>{
     }
     
 })
-app.get("/:notFound", (req, res)=>{
-    res.render("404");
-})
 app.get("/signin", (req, res)=>{
     res.render("signin", {errorMessage: ""});
 })
@@ -123,6 +120,9 @@ app.get("/calendar", (req, res)=>{
     } else{
         res.redirect("/signin");
     }
+})
+app.get("/:notFound", (req, res)=>{
+    res.render("404");
 })
 //POSTS
 app.post("/signup", (req, res)=>{
