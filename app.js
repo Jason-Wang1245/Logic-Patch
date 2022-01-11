@@ -57,6 +57,7 @@ const eventSchema = new mongoose.Schema({
     opposingTeam: String,
     date: String,
     location: String,
+    teamKey: String,
     availablePlayers: [userSchema],
     unavailablePlayers: [userSchema]
 });
@@ -94,7 +95,9 @@ app.get("/homepage", (req, res)=>{
         } else{
             // coach
             Event.find({teamKey: req.user.key}, (err, foundEvents)=>{
-                res.render("homepage", {currentUser: req.user, foundEvents: foundEvents, today: today});
+                Team.findOne({key: req.user.key}, (err, foundTeam)=>{
+                    res.render("homepage", {currentUser: req.user, foundEvents: foundEvents, today: today, numberOfPlayers: foundTeam.players.length});
+                })
             })   
         }
     } else{
@@ -105,7 +108,7 @@ app.get("/teamlist", (req, res)=>{
     if(req.isAuthenticated()){
         Team.findOne({key: req.user.key}, (err, foundTeam)=>{
             User.findOne({username: foundTeam.coach}, (err, foundCoach)=>{
-                res.render("teamlist", {teamKey: req.user.key, coach: foundCoach, players: foundTeam.players});
+                res.render("teamlist", {currentUser: req.user, teamKey: req.user.key, coach: foundCoach, players: foundTeam.players});
             });
         });
     } else{
@@ -275,6 +278,35 @@ app.post("/cannotAttend", (req, res)=>{
     })
 
     res.redirect("/homepage");
+})
+app.post("/deleteEvent", (req, res)=>{
+    const eventId = req.body.eventId;
+
+    Event.findByIdAndDelete(eventId, (err)=>{
+        if(err){
+            console.log(err);
+        }
+    });
+    res.redirect("/homepage");
+})
+app.post("/removePlayer", (req, res)=>{
+    const playerId = req.body.playerId;
+
+    User.findByIdAndUpdate(playerId, {key: ""}, (err)=>{
+        if(err){
+            console.log(err);
+        }
+    })
+    Team.findOne({key: req.user.key}, (err, foundTeam)=>{
+        for(var i = 0; i < foundTeam.players.length; i++){
+            if(foundTeam.players[i].id == playerId){
+                foundTeam.players.splice(i, i+1);
+                foundTeam.save();
+            }
+        }
+    })
+
+    res.redirect("/teamlist");
 })
 
 // validates the user entered email

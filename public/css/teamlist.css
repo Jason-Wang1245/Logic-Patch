@@ -10,26 +10,12 @@ body {
   background-color: #1c2633;
 }
 header {
-  background-color: #212c3b;
-}
-#heading0 {
-  margin-top: 2%;
+  background-color: #1c2633;
 }
 .accordion-button {
   color: white;
   background-color: #1c2633;
   border-radius: 0;
-}
-.accordion-item:last-of-type .accordion-button.collapsed {
-  border-radius: 0;
-}
-.accordion-button:not(.collapsed) {
-  border-radius: 0;
-}
-.accordion-item {
-  margin-left: 4%;
-  margin-right: 4%;
-  border: 1px solid white;
 }
 .accordion-button:not(.collapsed) {
   color: white;
@@ -43,14 +29,6 @@ header {
 .accordion-button:focus {
   box-shadow: none;
   border-color: rgba(0, 0, 0, 0.125);
-}
-.accordion-button::after {
-  background-image: url("https://cdn-icons-png.flaticon.com/512/1636/1636053.png");
-  transform: none;
-}
-.accordion-button:not(.collapsed)::after {
-  background-image: url("https://cdn-icons-png.flaticon.com/512/1636/1636053.png");
-  transform: none;
 }
 .main-nav {
   height: 90px;
@@ -119,27 +97,21 @@ li a.contact:hover {
   display: none;
   cursor: pointer;
 }
-.new-event {
-  margin-top: 2%;
-  margin-bottom: 2%;
+.accordion-body {
+  text-align: center;
+}
+.accordion-button {
+  display: block;
+}
+.player {
+  margin-bottom: 1%;
   margin-left: 4%;
   margin-right: 4%;
 }
-.modal-content {
-  background: #1c2633;
-  color: white;
-}
-.form-control {
-  color: white;
-  background-color: #222e3d;
-  border: 0;
-}
-.form-control:focus {
-  color: white;
-  background-color: #222e3d;
-  border: 0;
-  box-shadow: none;
-  border-color: rgba(0, 0, 0, 0.125);
+.Coach_thingy {
+  margin-bottom: 1%;
+  margin-left: 4%;
+  margin-right: 4%;
 }
 @media (max-width: 800px) {
   .navlinks {
