@@ -21,6 +21,12 @@
       <div id="eventTitle<%= i %>" data-config='<%= events[i].eventTitle %>'></div>
       <div id="eventDescription<%= i %>" data-config='<%= events[i].eventDescription %>'></div>
       <div id="eventDate<%= i %>" data-config='<%= events[i].date %>'></div>
+      <% if(events[i].availablePlayers.length < events[i].attendance){ %>
+        <div id="attendance<%= i %>" data-config='false'></div>
+      <% } else{ %>
+        <div id="attendance<%= i %>" data-config='true'></div>
+      <% } %> 
+
     <% } %> 
 
     <div id="calendar"></div>

@@ -80,7 +80,10 @@ app.get("/", (req, res)=>{
     
 })
 app.get("/signin", (req, res)=>{
-    res.render("signin", {errorMessage: ""});
+    res.render("signin");
+})
+app.get("/signin-error", (req, res)=>{
+    res.render("signin-error");
 })
 app.get("/signup", (req, res)=>{
     res.render("signup", {errorMessage: ""});
@@ -190,7 +193,7 @@ app.post("/signup", (req, res)=>{
     })
 });
 // login error check
-app.post('/signin', passport.authenticate('local', { successRedirect: '/homepage', failureRedirect: '/signin', failureFlash: true}));
+app.post('/signin', passport.authenticate('local', { successRedirect: '/homepage', failureRedirect: '/signin-error', failureFlash: true}));
 // player account key enter
 app.post("/enterKey", (req, res)=>{
     const enteredKey = req.body.key;
