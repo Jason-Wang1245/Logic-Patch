@@ -13,7 +13,7 @@ const flash = require('connect-flash');
 app.use(flash());
 
 // ejs and body-parser setup
-app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.urlencoded({extended: true}));t
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 // passport setup
@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
     accountType: String,
     key: String
 });
+// setup for passport
 userSchema.plugin(passportLocalMongoose);
 const User = mongoose.model("User", userSchema);
 passport.use(User.createStrategy());
@@ -63,7 +64,7 @@ const eventSchema = new mongoose.Schema({
 });
 const Event = mongoose.model("Event", eventSchema);
 
-// VARIABLES
+// today's date as a string
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
@@ -71,6 +72,7 @@ var yyyy = today.getFullYear();
 today = yyyy + '-' + mm + '-' + dd;
 
 //GETS
+// loads homepage differently depending on whether the user is signed in
 app.get("/", (req, res)=>{
     if(req.isAuthenticated()){
         res.render("mainpage", {authentication: true});
@@ -78,25 +80,29 @@ app.get("/", (req, res)=>{
         res.render("mainpage", {authentication: false});
     }
     
-})
+});
+// loads signin page
 app.get("/signin", (req, res)=>{
     res.render("signin");
-})
+});
+// loads signin page with error message
 app.get("/signin-error", (req, res)=>{
     res.render("signin-error");
-})
+});
+// loads signup page
 app.get("/signup", (req, res)=>{
     res.render("signup", {errorMessage: ""});
-})
+});
+// loads homepage
 app.get("/homepage", (req, res)=>{
-    // checks if user is authenticated
+    // checks if user is logged in
     if(req.isAuthenticated()){
         // checks if the user is a player or coach account and whether their key is given or not
         if(req.user.key === ""){
-            // players
+            // players initial signup
             res.render("enterKey", {errorMessage: ""});
         } else{
-            // coach
+            // typicaly signin
             Event.find({teamKey: req.user.key}, (err, foundEvents)=>{
                 Team.findOne({key: req.user.key}, (err, foundTeam)=>{
                     res.render("homepage", {currentUser: req.user, foundEvents: foundEvents, today: today, numberOfPlayers: foundTeam.players.length});
@@ -106,8 +112,10 @@ app.get("/homepage", (req, res)=>{
     } else{
         res.redirect("/signin");
     }
-})
+});
+// loads teamlist page
 app.get("/teamlist", (req, res)=>{
+    // check if user is logged in
     if(req.isAuthenticated()){
         Team.findOne({key: req.user.key}, (err, foundTeam)=>{
             User.findOne({username: foundTeam.coach}, (err, foundCoach)=>{
@@ -117,8 +125,10 @@ app.get("/teamlist", (req, res)=>{
     } else{
         res.redirect("/signin")
     }
-})
+});
+// loads calendar page
 app.get("/calendar", (req, res)=>{
+    // check if the user is logged in
     if(req.isAuthenticated()){
         Event.find({teamKey: req.user.key}, (err, foundEvents)=>{
             res.render("calendar", {events: foundEvents});
@@ -126,11 +136,14 @@ app.get("/calendar", (req, res)=>{
     } else{
         res.redirect("/signin");
     }
-})
+});
+// loads 404 error page
 app.get("/:notFound", (req, res)=>{
     res.render("404");
-})
+});
+
 //POSTS
+// logic for signup process
 app.post("/signup", (req, res)=>{
     const username = req.body.username;
     const name = req.body.name;
@@ -192,7 +205,7 @@ app.post("/signup", (req, res)=>{
         }
     })
 });
-// login error check
+// logic for login process
 app.post('/signin', passport.authenticate('local', { successRedirect: '/homepage', failureRedirect: '/signin-error', failureFlash: true}));
 // player account key enter
 app.post("/enterKey", (req, res)=>{
@@ -232,7 +245,7 @@ app.post("/createEvent", (req, res)=>{
     const opposingTeam = req.body.opposingTeam;
     const date = req.body.date;
     const location = req.body.location;
-    // creates new event with given input
+    // creates new event object with given input
     const event = new Event({
         teamKey: req.user.key,
         eventTitle: eventTitle,
@@ -244,14 +257,15 @@ app.post("/createEvent", (req, res)=>{
         availablePlayers: [],
         unavailablePlayers: []
     })
+    // adds data to database
     event.save();
 
     res.redirect("/homepage");
-})
+});
 // adds player to available list under event
 app.post("/canAttend", (req, res)=>{
     const eventId = req.body.eventId;
-
+    // removes user from unavailable list if they're on it and adds them to the available list
     Event.findById(eventId, (err, foundEvent)=>{
         if(foundEvent){
             const index = foundEvent.unavailablePlayers.findIndex(user => user.id === req.user.id);
@@ -264,11 +278,11 @@ app.post("/canAttend", (req, res)=>{
     })
 
     res.redirect("/homepage");
-})
+});
 // adds player to unavailable list under event
 app.post("/cannotAttend", (req, res)=>{
     const eventId = req.body.eventId;
-
+    // removes user from availble list if they're on it and adds them to the unavailable list
     Event.findById(eventId, (err, foundEvent)=>{
         if(foundEvent){
             const index = foundEvent.availablePlayers.findIndex(user => user.id === req.user.id);
@@ -281,7 +295,8 @@ app.post("/cannotAttend", (req, res)=>{
     })
 
     res.redirect("/homepage");
-})
+});
+// logic for deleting events - coach accounts only
 app.post("/deleteEvent", (req, res)=>{
     const eventId = req.body.eventId;
 
@@ -291,7 +306,8 @@ app.post("/deleteEvent", (req, res)=>{
         }
     });
     res.redirect("/homepage");
-})
+});
+// logic for removing players - coach accounts only
 app.post("/removePlayer", (req, res)=>{
     const playerId = req.body.playerId;
 
@@ -311,7 +327,6 @@ app.post("/removePlayer", (req, res)=>{
 
     res.redirect("/teamlist");
 })
-
 // validates the user entered email
 function emailValidation(email){
     var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
