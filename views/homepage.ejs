@@ -58,7 +58,7 @@
     <% if(currentUser.accountType ==="coach"){ %>
       <div class="new-event">
         <div class="d-grid gap-2">
-          <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo">Add New Event</button>
+          <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#exampleModal" data-bs-whatever="@mdo" style="border-radius: 20px;">Add New Event</button>
         </div> 
       </div>
     <% } %> 
@@ -141,7 +141,7 @@
                 <% } %>
               </button> 
             </h2>
-            <div id="collapse<%=i%>" class="accordion-collapse collapse" aria-labelledby="heading<%=i%>" data-bs-parent="#accordionExample1">
+            <div id="collapse<%=i%>" class="accordion-collapse collapse" aria-labelledby="heading<%=i%>" data-bs-parent="#accordionExample">
               <div class="accordion-body">
                 <form action="/canAttend" method="post">
                   <input name="eventId" value="<%= foundEvents[i].id %>" style="display: none;">
