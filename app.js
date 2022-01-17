@@ -13,7 +13,7 @@ const flash = require('connect-flash');
 app.use(flash());
 
 // ejs and body-parser setup
-app.use(bodyParser.urlencoded({extended: true}));t
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 app.set('view engine', 'ejs');
 // passport setup
