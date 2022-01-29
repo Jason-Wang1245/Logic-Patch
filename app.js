@@ -25,9 +25,10 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/LogicPatch", {useNewUrlParser: true});
-// mongoose.connect("mongodb+srv://jason:codeide1@logicpatch.gvlmw.mongodb.net/LogicPatch", {useNewUrlParser: true});
+// mongoose.connect("mongodb://localhost:27017/LogicPatch", {useNewUrlParser: true});
+mongoose.connect("mongodb+srv://jason:codeide1@logicpatch.gvlmw.mongodb.net/LogicPatch", {useNewUrlParser: true});
 
+// schema - sets up collections within the database
 // user schema
 const userSchema = new mongoose.Schema({
     username: String,
@@ -67,7 +68,7 @@ const Event = mongoose.model("Event", eventSchema);
 // today's date as a string
 var today = new Date();
 var dd = String(today.getDate()).padStart(2, '0');
-var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+var mm = String(today.getMonth() + 1).padStart(2, '0');
 var yyyy = today.getFullYear();
 today = yyyy + '-' + mm + '-' + dd;
 
@@ -326,7 +327,8 @@ app.post("/removePlayer", (req, res)=>{
     })
 
     res.redirect("/teamlist");
-})
+});
+
 // validates the user entered email
 function emailValidation(email){
     var emailPattern = /^[^ ]+@[^ ]+\.[a-z]{2,3}$/;
