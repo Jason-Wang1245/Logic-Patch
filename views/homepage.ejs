@@ -167,14 +167,6 @@
             <h2 class="accordion-header" id="heading<%=i%>">
               <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=i%>" aria-expanded="false" aria-controls="collapse<%=i%>">
                 <%= foundEvents[i].eventTitle %> <!-- event title -->
-                <!-- if the user is a coach and the attendance requirement is not met, display notification icon -->
-                <% if(foundEvents[i].availablePlayers.length < foundEvents[i].attendance && currentUser.accountType === "coach"){ %> 
-                  <img src="images/notification.png" alt="notification.png" style="position: absolute;right: 60px; width:5px;height:5px;">
-                <% } %>
-                <!-- if the user has submitted their attendance, display notification icon -->
-                <% if(!foundEvents[i].availablePlayers.some(user => user.username === currentUser.username) && !foundEvents[i].unavailablePlayers.some(user => user.username === currentUser.username) && currentUser.accountType === "player"){ %> 
-                  <img src="images/notification.png" alt="notification.png" style="position: absolute;right: 60px; width:5px;height:5px;">
-                <% } %>
               </button> 
             </h2>
             <div id="collapse<%=i%>" class="accordion-collapse collapse" aria-labelledby="heading<%=i%>" data-bs-parent="#accordionExample">
