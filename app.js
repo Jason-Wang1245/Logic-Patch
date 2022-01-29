@@ -1,3 +1,4 @@
+// creating variables to use libraries
 const express = require('express');
 const app = express();
 const port = 3000; 
@@ -11,7 +12,6 @@ const passportLocalMongoose = require('passport-local-mongoose');
 const flash = require('connect-flash');
 
 app.use(flash());
-
 // ejs and body-parser setup
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
@@ -103,14 +103,16 @@ app.get("/homepage", (req, res)=>{
             // players initial signup
             res.render("enterKey", {errorMessage: ""});
         } else{
-            // typicaly signin
+            // if user belongs to a team, direct them to homepage
             Event.find({teamKey: req.user.key}, (err, foundEvents)=>{
                 Team.findOne({key: req.user.key}, (err, foundTeam)=>{
+                    // passes data needed to the team homepage and renders it
                     res.render("homepage", {currentUser: req.user, foundEvents: foundEvents, today: today, numberOfPlayers: foundTeam.players.length});
                 })
             })   
         }
     } else{
+        // redirect user to signin if they're not logged in
         res.redirect("/signin");
     }
 });
@@ -119,11 +121,13 @@ app.get("/teamlist", (req, res)=>{
     // check if user is logged in
     if(req.isAuthenticated()){
         Team.findOne({key: req.user.key}, (err, foundTeam)=>{
+            // passes data needed to the teamlist page and renders it
             User.findOne({username: foundTeam.coach}, (err, foundCoach)=>{
                 res.render("teamlist", {currentUser: req.user, teamKey: req.user.key, coach: foundCoach, players: foundTeam.players});
             });
         });
     } else{
+        // redirect user to signin if they're not logged in
         res.redirect("/signin")
     }
 });
@@ -132,9 +136,11 @@ app.get("/calendar", (req, res)=>{
     // check if the user is logged in
     if(req.isAuthenticated()){
         Event.find({teamKey: req.user.key}, (err, foundEvents)=>{
+            // passes all the events to the event page and renders it
             res.render("calendar", {events: foundEvents});
         })  
     } else{
+        // redirect user to signin if they're not logged in
         res.redirect("/signin");
     }
 });
@@ -143,9 +149,10 @@ app.get("/:notFound", (req, res)=>{
     res.render("404");
 });
 
-//POSTS
+// POSTS
 // logic for signup process
 app.post("/signup", (req, res)=>{
+    // gets all user detials from the signup page
     const username = req.body.username;
     const name = req.body.name;
     const email = req.body.email;
@@ -156,7 +163,7 @@ app.post("/signup", (req, res)=>{
     var key = "";
     var team = "";
 
-    // generates a new key if coach account is created
+    // generates a new team if coach account is created
     if(accountType === "coach"){
         key = uid();
         Team.exists({key: key}, (err, result)=>{
@@ -172,30 +179,39 @@ app.post("/signup", (req, res)=>{
     }
     // signup form error checking
     User.exists({email: email}, (err, result)=>{
+        // checks if their is name input
         if(name == ""){
             res.render("signup", {errorMessage: "No name was given"});
         } else{
+            // checks if the email is in correct email format
             if(email == "" || !emailValidation(email) || result != null){
                 res.render("signup", {errorMessage: "Email is in use or invalid"});
             } else{
+                // password strength check (one cap, one non-cap, and one number)
                 if(!(/[a-z]/.test(password) && /[A-Z]/.test(password) && /\d/.test(password))){
                     res.render("signup", {errorMessage: "Password must include one capital and non-capital letter and one number"});
                 } else{
+                    // checks if the confirmed password and password fields match
                     if(password != confirmedPassword){
                         res.render("signup", {errorMessage: "Password do not match"});
                     } else{
+                        // checks if user has given account type input
                         if(accountType === undefined){
                             res.render("signup", {errorMessage: "No account type was given"});
                         } else{
+                            // validation with database
                             User.register({username: username, name: name, email: email, accountType: accountType, key: key}, password, (err, user)=>{
                                 if(err){
+                                    // checks if username is already in use
                                     res.render("signup", {errorMessage: err.message});
                                 } else{
+                                    // if the user signed up as a coach, add the team created earlier to the database
                                     if(accountType === "coach"){
                                         team.save();
                                     }
+                                    // if all above error-checks have been passed, add user to the database
                                     passport.authenticate("local")(req, res, ()=>{
-                                        res.redirect("/homepage");
+                                        res.redirect("/homepage"); 
                                     })
                                 }
                             })
@@ -211,7 +227,7 @@ app.post('/signin', passport.authenticate('local', { successRedirect: '/homepage
 // player account key enter
 app.post("/enterKey", (req, res)=>{
     const enteredKey = req.body.key;
-
+    // checks if user given key is valid and if it is, add them to the team
     Team.findOne({key: enteredKey}, (err, foundTeam)=>{
         if(err){
             console.log(err);
@@ -224,10 +240,10 @@ app.post("/enterKey", (req, res)=>{
                 // adds the user to the team list
                 foundTeam.players.push(req.user);
                 foundTeam.save();
-                
+                // redirect user to the homepage
                 res.redirect("/homepage");
             } else{
-                // render invalid message
+                // render invalid message and refresh page
                 res.render("enterKey", {errorMessage: "Invalid key, please ask your coach for the team page key"});
             }
         }
@@ -236,10 +252,12 @@ app.post("/enterKey", (req, res)=>{
 // logs user out
 app.post("/logout", (req, res)=>{
     req.logout();
+    // redirects user to mainpage
     res.redirect("/");
 });
 // create new event
 app.post("/createEvent", (req, res)=>{
+    // gets all event details from the create event modal page
     const eventTitle = req.body.eventTitle;
     const eventDescription = req.body.eventDescription;
     const attendance = req.body.attendance;
@@ -260,7 +278,7 @@ app.post("/createEvent", (req, res)=>{
     })
     // adds data to database
     event.save();
-
+    // refresh page
     res.redirect("/homepage");
 });
 // adds player to available list under event
@@ -277,7 +295,7 @@ app.post("/canAttend", (req, res)=>{
             foundEvent.save();
         }
     })
-
+    // refresh page
     res.redirect("/homepage");
 });
 // adds player to unavailable list under event
@@ -294,7 +312,7 @@ app.post("/cannotAttend", (req, res)=>{
             foundEvent.save();
         }
     })
-
+    // refresh page
     res.redirect("/homepage");
 });
 // logic for deleting events - coach accounts only
@@ -311,12 +329,13 @@ app.post("/deleteEvent", (req, res)=>{
 // logic for removing players - coach accounts only
 app.post("/removePlayer", (req, res)=>{
     const playerId = req.body.playerId;
-
+    // finds the user within the database and clear their key
     User.findByIdAndUpdate(playerId, {key: ""}, (err)=>{
         if(err){
             console.log(err);
         }
-    })
+    });
+    // removes the player from the team they were in within the database
     Team.findOne({key: req.user.key}, (err, foundTeam)=>{
         for(var i = 0; i < foundTeam.players.length; i++){
             if(foundTeam.players[i].id == playerId){
@@ -324,8 +343,8 @@ app.post("/removePlayer", (req, res)=>{
                 foundTeam.save();
             }
         }
-    })
-
+    });
+    // refresh page
     res.redirect("/teamlist");
 });
 
