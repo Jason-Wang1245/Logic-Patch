@@ -25,7 +25,6 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// mongoose.connect("mongodb://localhost:27017/LogicPatch", {useNewUrlParser: true});
 mongoose.connect("mongodb+srv://jason:codeide1@logicpatch.gvlmw.mongodb.net/LogicPatch", {useNewUrlParser: true});
 
 // schema - sets up collections within the database
