@@ -5,23 +5,32 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>LogicPatch - Teamlist</title>
+    <!-- boostrap libraries -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css"/>
+    <!-- custom css -->
     <link rel="stylesheet" href="css/teamlist.css"/>
+    <!-- webpage icon -->
     <link rel="icon" href="images/icon.ico">
   </head>
   <body>
+    <!-- boostrap styling used in everything -->
+    <!-- adds the navbar -->
     <%- include('partials/header') %> 
+    <!-- display acess code to the team page -->
     <p class="fs-3 text-info text-center">Team Code: <%= teamKey %> </p>
+    <!-- display the coach -->
     <p class="fs-3 text-info text-center">Coach</p>
     <div class="Coach_thingy">
       <div class="accordion-item">
         <h2 class="accordion-header" id="panelsStayOpen-headingCoach">
           <button class="accordion-button collapsed  text-center" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseCoach" aria-expanded="false" aria-controls="panelsStayOpen-collapseCoach">
+            <!-- users name -->
             <%= coach.name %>
           </button>
         </h2>
         <div id="panelsStayOpen-collapseCoach" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingCoach">
+          <!-- user details -->
           <div class="accordion-body">
             <p><strong style="user-select: none;">Username: </strong><%= coach.username %> </p>
             <p><strong style="user-select: none;">Email: </strong><%= coach.email %> </p>
@@ -29,34 +38,38 @@
         </div>
       </div> 
     </div>
-  
+    <!-- display players -->
     <p class="fs-3 text-info text-center">Players</p>
     <div class="accordion" id="accordionExample">
+      <!-- loops through every player within the team -->
     <% for(var i = 0; i < players.length; i++){ %> 
-        <div class="player">
-          <div class="accordion-item bg-gradient">
-            <h2 class="accordion-header" id="heading<%=i%>">
-              <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=i%>" aria-expanded="false" aria-controls="collapse<%=i%>">
-                <%= players[i].name %>
-              </button>
-            </h2>
-            <div id="collapse<%=i%>" class="accordion-collapse collapse" aria-labelledby="heading<%=i%>" data-bs-parent="#accordionExample">
-              <div class="accordion-body">
-                <p><strong style="user-select: none;">Username: </strong><%= players[i].username %> </p>
-                <p><strong style="user-select: none;">Email: </strong><%= players[i].email %> </p>
-                <% if(currentUser.accountType === "coach"){ %> 
-                  <form action="/removePlayer" method="post">
-                    <input name="playerId" value="<%= players[i].id %>" style="display: none;">
-                    <button type="submit" class="btn btn-danger">Remove Player</button>
-                  </form>
-                <% } %> 
-              </div>
+      <div class="player">
+        <div class="accordion-item bg-gradient">
+          <h2 class="accordion-header" id="heading<%=i%>">
+            <button class="accordion-button collapsed text-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapse<%=i%>" aria-expanded="false" aria-controls="collapse<%=i%>">
+              <!-- users name -->
+              <%= players[i].name %>
+            </button>
+          </h2>
+          <div id="collapse<%=i%>" class="accordion-collapse collapse" aria-labelledby="heading<%=i%>" data-bs-parent="#accordionExample">
+            <div class="accordion-body">
+              <!-- user details -->
+              <p><strong style="user-select: none;">Username: </strong><%= players[i].username %> </p>
+              <p><strong style="user-select: none;">Email: </strong><%= players[i].email %> </p>
+              <!-- if the user is a coach, display the remove player button that makes a post request to remove them; hanled in app.js -->
+              <% if(currentUser.accountType === "coach"){ %> 
+                <form action="/removePlayer" method="post">
+                  <input name="playerId" value="<%= players[i].id %>" style="display: none;">
+                  <button type="submit" class="btn btn-danger">Remove Player</button>
+                </form>
+              <% } %> 
             </div>
           </div>
         </div>
+      </div>
     <% } %> 
     </div>
-
+    <!-- boostrap library -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
   </body>
 </html>

@@ -1,33 +1,35 @@
 <!DOCTYPE html>
 <html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>LogicPatch - Signup</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet" href="css/signup.css">
-  <link rel="icon" href="images/icon.ico">
-</head>
-<body class="bg-dark">
-
-
-<style>
-    body {
-        background-image: url(images/login-signup.jpg);
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: 100% 100%;
-        background-size: cover;
-    }
-</style>
-
-<div class="pt-5">
-  <h1 class="text-center">LogicPatch Sign Up</h1>
-
-<div class="container">
+    <head>
+        <meta charset="UTF-8">
+        <title>LogicPatch - Signup</title>
+        <!-- boostrap libraries -->
+        <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'>
+        <!-- custom css -->
+        <link rel="stylesheet" href="css/login-signup.css">
+        <!-- webpage icon -->
+        <link rel="icon" href="images/icon.ico"> 
+        <style>
+            body {
+                background-image: url(images/login-signup.jpg);
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%; /* ensures image renders properly on all devices */
+                background-size: cover;
+            }
+        </style>
+    </head>
+    <!-- boostrap library used to style -->
+    <body class="bg-dark">
+        <div class="pt-5">
+            <h1 class="text-center">LogicPatch Sign Up</h1>
+            <div class="container">
                 <div class="row">
                     <div class="col-md-5 mx-auto">
                         <div class="card card-body" style="margin-bottom: 100px;">          
+                            <!-- makes post request to signin user, handled in app.js -->  
                             <form id="submitForm" action="/signup" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
                                 <div class="form-group required">
                                     <label class="d-flex flex-row align-items-center" for="username">Username 
@@ -56,6 +58,7 @@
                                 </div>
                                 <div class="form-group required">
                                     <p>Account Type</p>
+                                    <!-- this ensure that the user is only allowed to pick one of the two options -->
                                     <div>
                                         <input tabindex="6" type="radio" name="accountType" value="player">
                                         <label for="dewey">Player</label>
@@ -65,6 +68,7 @@
                                         <label for="louie">Coach</label>
                                     </div>
                                 </div>
+                                <!-- displays error message if post request finds error -->
                                 <p style="color: #CC0808; font-size: 12px"><%= errorMessage %></p>
                                 <div class="form-group pt-1">
                                     <button tabindex="8" class="btn btn-primary btn-block" type="submit">Sign Up</button>
@@ -72,12 +76,12 @@
                             </form>
                             <p class="small-xl pt-3 text-center">
                                 <span class="text-muted">Already registered?</span>
-                                <a href="signin">Log In</a>
+                                <a href="signin">Log In</a> <!-- link to signup page -->
                             </p>
                         </div>
                     </div>
                 </div>
             </div>
-</div>
-</body>
+        </div>
+    </body>
 </html>

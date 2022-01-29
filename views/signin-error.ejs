@@ -1,58 +1,59 @@
+<!-- this page is rendered when the user enters invalid fields when logging in -->
 <!DOCTYPE html>
-<html lang="en" >
-<head>
-  <meta charset="UTF-8">
-  <title>LogicPatch - Login</title>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'><link rel="stylesheet" href="css/signup.css">
-  <link rel="icon" href="images/icon.ico">
-</head>
-<body class="bg-dark">
-
-
-<style>
-    body {
-        background-image: url(images/login-signup.jpg);
-        background-repeat: no-repeat;
-        background-attachment: fixed;
-        background-size: 100% 100%;
-    }
-</style>
-
-<div class="pt-5">
-    <h1 class="text-center">LogicPatch Log In</h1>
-  
-    <div class="container">
-        <div class="row">
-            <div class="col-md-5 mx-auto">
-                <div class="card card-body">             
-                    <form id="submitForm" action="/signin" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
-                        <div class="form-group required">
-                            <label class="d-flex flex-row align-items-center" for="username">Username 
-                                <a class="ml-auto border-link small-xl" href="#"></a></label>
-                            <input tabindex="1" type="text" class="form-control" id="username" required="" name="username" value="">
-                        </div>                    
-                        <div class="form-group required">
-                            <label class="d-flex flex-row align-items-center" for="password">Password 
-                                <a class="ml-auto border-link small-xl" href="#"></a></label>
-                            <input tabindex="2" type="password" class="form-control" required="" id="password" name="password" value="">
+<html lang="en">
+    <head>
+    <meta charset="UTF-8">
+    <title>LogicPatch - Login</title>
+    <!-- boostrap libraries -->
+    <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css'>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Muli'>
+    <!-- custom css -->
+    <link rel="stylesheet" href="css/login-signup.css">
+    <!-- webpage icon -->
+    <link rel="icon" href="images/icon.ico"> 
+    <style>
+        body {
+            background-image: url(images/login-signup.jpg);
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: 100% 100%; /* ensures image renders properly on all devices */
+        }
+        </style>
+    </head>
+    <!-- boostrap library used to style -->
+    <body class="bg-dark">
+        <div class="pt-5">
+            <h1 class="text-center">LogicPatch Log In</h1>
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-5 mx-auto">
+                        <div class="card card-body">
+                            <!-- makes post request to signin user, handled in app.js -->
+                            <form id="submitForm" action="/signin" method="post" data-parsley-validate="" data-parsley-errors-messages-disabled="true" novalidate="" _lpchecked="1"><input type="hidden" name="_csrf" value="7635eb83-1f95-4b32-8788-abec2724a9a4">
+                                <div class="form-group required">
+                                    <label class="d-flex flex-row align-items-center" for="username">Username 
+                                        <a class="ml-auto border-link small-xl" href="#"></a></label>
+                                    <input tabindex="1" type="text" class="form-control" id="username" required="" name="username" value="">
+                                </div>                    
+                                <div class="form-group required">
+                                    <label class="d-flex flex-row align-items-center" for="password">Password 
+                                        <a class="ml-auto border-link small-xl" href="#"></a></label>
+                                    <input tabindex="2" type="password" class="form-control" required="" id="password" name="password" value="">
+                                </div>
+                                <p style="color: #CC0808; font-size: 12px">Username or password is invalid</p>
+                                <div class="form-group pt-1">
+                                    <button tabindex="3" class="btn btn-primary btn-block" type="submit">Log In</button>
+                                </div>
+                            </form>
+                            <p class="small-xl pt-3 text-center">
+                                <span class="text-muted">Not a member?</span>
+                                <a href="signup">Sign up</a> <!-- link to signup page -->
+                            </p>
                         </div>
-                        <p style="color: #CC0808; font-size: 12px">Username or password is invalid</p>
-                        <div class="form-group pt-1">
-                            <button tabindex="3" class="btn btn-primary btn-block" type="submit">Log In</button>
-                        </div>
-                    </form>
-                    <p class="small-xl pt-3 text-center">
-                        <span class="text-muted">Not a member?</span>
-                        <a href="signup">Sign up</a>
-                    </p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
-
-  
-</body>
+    </body>
 </html>
