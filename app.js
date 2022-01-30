@@ -1,3 +1,4 @@
+// This is the back-bone of the entire website. It loads all of the html pages and handles the POST and GET requests. Connection with the database, logic for error-checking, are all located within this file
 // creating variables to use libraries
 const express = require('express');
 const app = express();
